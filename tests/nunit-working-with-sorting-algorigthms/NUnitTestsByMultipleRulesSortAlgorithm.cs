@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsByMultipleRulesSortAlgorithm
     {
         private IByMultipleRulesSort byMultipleRulesSort;
+
         [SetUp]
         public void Setup()
         {

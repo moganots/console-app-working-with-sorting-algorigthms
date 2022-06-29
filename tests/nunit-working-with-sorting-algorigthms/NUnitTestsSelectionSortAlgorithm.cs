@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsSelectionSortAlgorithm
     {
         private ISelectionSort selectionSort;
+
         [SetUp]
         public void Setup()
         {

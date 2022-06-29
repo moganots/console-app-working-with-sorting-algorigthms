@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsCartesianTreeSortAlgorithm
     {
         private ICartesianTreeSort cartesianTreeSort;
+
         [SetUp]
         public void Setup()
         {

@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsTimSortAlgorithm
     {
         private ITimSort timSort;
+
         [SetUp]
         public void Setup()
         {

@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsThreeWayMergeSortAlgorithm
     {
         private IThreeWayMergeSort threeWayMergeSort;
+
         [SetUp]
         public void Setup()
         {

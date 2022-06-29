@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsRecursiveBubbleSortAlgorithm
     {
         private IRecursiveBubbleSort recursiveBubbleSort;
+
         [SetUp]
         public void Setup()
         {

@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsBitonicSortAlgorithm
     {
         private IBitonicSort bitonicSort;
+
         [SetUp]
         public void Setup()
         {

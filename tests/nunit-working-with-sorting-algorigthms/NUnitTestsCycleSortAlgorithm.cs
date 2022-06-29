@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsCycleSortAlgorithm
     {
         private ICycleSort cycleSort;
+
         [SetUp]
         public void Setup()
         {

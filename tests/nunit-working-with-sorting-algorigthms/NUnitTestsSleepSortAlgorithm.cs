@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsSleepSortAlgorithm
     {
         private ISleepSort sleepSort;
+
         [SetUp]
         public void Setup()
         {

@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsStrandSortAlgorithm
     {
         private IStrandSort strandSort;
+
         [SetUp]
         public void Setup()
         {

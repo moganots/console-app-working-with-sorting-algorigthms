@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsQuickSortOnSinglyLinkedListAlgorithm
     {
         private IQuickSortOnSinglyLinkedList quickSortOnSinglyLinkedList;
+
         [SetUp]
         public void Setup()
         {

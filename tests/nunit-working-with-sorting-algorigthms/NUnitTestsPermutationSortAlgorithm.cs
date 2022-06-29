@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsPermutationSortAlgorithm
     {
         private IPermutationSort permutationSort;
+
         [SetUp]
         public void Setup()
         {

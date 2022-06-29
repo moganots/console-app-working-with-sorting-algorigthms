@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsThreeWayQuickSortAlgorithm
     {
         private IThreeWayQuickSort threeWayQuickSort;
+
         [SetUp]
         public void Setup()
         {

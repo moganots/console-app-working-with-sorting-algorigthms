@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsPigeonholeSortAlgorithm
     {
         private IPigeonholeSort pigeonholeSort;
+
         [SetUp]
         public void Setup()
         {

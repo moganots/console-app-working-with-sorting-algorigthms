@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsBogoSortOrPermutationSortAlgorithm
     {
         private IBogoSortOrPermutationSort bogoSortOrPermutationSort;
+
         [SetUp]
         public void Setup()
         {

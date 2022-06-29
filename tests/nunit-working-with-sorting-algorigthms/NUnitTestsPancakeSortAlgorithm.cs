@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsPancakeSortAlgorithm
     {
         private IPancakeSort pancakeSort;
+
         [SetUp]
         public void Setup()
         {

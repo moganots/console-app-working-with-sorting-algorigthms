@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsCountingSortAlgorithm
     {
         private ICountingSort countingSort;
+
         [SetUp]
         public void Setup()
         {

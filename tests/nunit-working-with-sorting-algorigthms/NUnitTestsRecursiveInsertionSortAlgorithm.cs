@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsRecursiveInsertionSortAlgorithm
     {
         private IRecursiveInsertionSort recursiveInsertionSort;
+
         [SetUp]
         public void Setup()
         {

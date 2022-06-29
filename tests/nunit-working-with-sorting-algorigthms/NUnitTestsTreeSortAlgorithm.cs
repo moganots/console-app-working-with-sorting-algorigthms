@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsTreeSortAlgorithm
     {
         private ITreeSort treeSort;
+
         [SetUp]
         public void Setup()
         {

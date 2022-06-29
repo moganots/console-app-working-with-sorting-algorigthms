@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsBubbleSortAlgorithm
     {
         private IBubbleSort bubbleSort;
+
         [SetUp]
         public void Setup()
         {

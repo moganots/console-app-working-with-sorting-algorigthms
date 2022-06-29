@@ -22,6 +22,7 @@ void Main()
 		string directoryTests = Path.Combine(directoryCurrent, "tests");
 		string directoryTestsMS = Path.Combine(directoryTests, "ms-test-working-with-sorting-algorigthms");
 		string directoryTestsNUnit = Path.Combine(directoryTests, "nunit-working-with-sorting-algorigthms");
+		string directoryTestsNUnitWithMoq = Path.Combine(directoryTests, "nunitmoq-working-with-sorting-algorigthms");
 		string[] algorithms = {
 			"SelectionSort",
 			"BubbleSort",
@@ -71,19 +72,23 @@ void Main()
 		directoryTests.Dump();
 		directoryTestsMS.Dump();
 		directoryTestsNUnit.Dump();
+		directoryTestsNUnitWithMoq.Dump();
 		
 		CleanDirectoryOnly(directoryLib, ".cs");
 		CleanDirectoryOnly(directoryTestsMS, ".cs");
 		CleanDirectoryOnly(directoryTestsNUnit, ".cs");
+		CleanDirectoryOnly(directoryTestsNUnitWithMoq, ".cs");
 		
 		foreach(string algorithm in algorithms){
 			string libClass = templateLibaryClass(algorithm, createdBy, dateCreated);
 			string msTestClass = templateMSTestClass(algorithm, createdBy, dateCreated);
 			string nunitClass = templateNUnitTestClass(algorithm, createdBy, dateCreated);
+			string nunitMoqClass = templateNUnitMoqTestClass(algorithm, createdBy, dateCreated);
 			
 			replaceFile(Path.Combine(directoryLib, String.Format("{0}.cs", algorithm)), libClass);
 			replaceFile(Path.Combine(directoryTestsMS, String.Format("MSTests{0}Algorithm.cs", algorithm)), msTestClass);
 			replaceFile(Path.Combine(directoryTestsNUnit, String.Format("NUnitTests{0}Algorithm.cs", algorithm)), nunitClass);
+			replaceFile(Path.Combine(directoryTestsNUnitWithMoq, String.Format("NUnitMoqTests{0}Algorithm.cs", algorithm)), nunitMoqClass);
 		}
 
 	}catch(Exception exception){
@@ -134,6 +139,12 @@ private void CleanDirectoryOnly(string path, string fileExtension = "*.*"){
 		}
 	}
 }
+private static IEnumerable<FileInfo> GetDirectoryFilesByExtensions(DirectoryInfo directory, params string[] extensions)
+{
+	if((directory == null || !directory.Exists) || (extensions == null || extensions.Length == 0)) return Enumerable.Empty<FileInfo>();
+	return directory.EnumerateFiles().Where(f => extensions.Contains(f.Extension));
+}
+
 private void createDirectoryIfNotExists(string path){
 	if(!System.IO.Directory.Exists(path)){
 		Console.WriteLine("Create Directory : {0}", path);
@@ -228,6 +239,40 @@ private String templateNUnitTestClass(string name, string createdBy, string date
 	sb.AppendLine(String.Format("    public class NUnitTests{0}Algorithm", className));
 	sb.AppendLine("    {");
 	sb.AppendLine(String.Format("        private I{0} {1};", className, variableName));
+	sb.AppendLine("");
+	sb.AppendLine("        [SetUp]");
+	sb.AppendLine("        public void Setup()");
+	sb.AppendLine("        {");
+	sb.AppendLine("        }");
+	sb.AppendLine("");
+	sb.AppendLine("        [Test]");
+	sb.AppendLine("        public void Test1()");
+	sb.AppendLine("        {");
+	sb.AppendLine("            Assert.Pass();");
+	sb.AppendLine("        }");
+	sb.AppendLine("    }");
+	sb.AppendLine("}");
+	sb.AppendLine("");
+	return sb.ToString();
+}
+private String templateNUnitMoqTestClass(string name, string createdBy, string dateCreated){
+	StringBuilder sb = new StringBuilder();
+	name = SplitCamelCase(name);
+	string className = name.Replace(" ", String.Empty);
+	string variableName = LowerFirstLetter(className);
+	sb.AppendLine("using lib;");
+	sb.AppendLine("using Moq;");
+	sb.AppendLine("using NUnit.Framework;");
+	sb.AppendLine("");
+	sb.AppendLine("namespace nunitmoq_working_with_sorting_algorigthms");
+	sb.AppendLine("{");
+	sb.AppendLine("    /// <summary>");
+	sb.AppendLine(String.Format("    /// Defines, sets up and implements the NUnit test(s) for the {0} Algorithm", name));
+	sb.AppendLine("    /// </summary>");
+	sb.AppendLine(String.Format("    public class NUnitTests{0}Algorithm", className));
+	sb.AppendLine("    {");
+	sb.AppendLine(String.Format("        private Mock<I{0}> {1};", className, variableName));
+	sb.AppendLine("");
 	sb.AppendLine("        [SetUp]");
 	sb.AppendLine("        public void Setup()");
 	sb.AppendLine("        {");

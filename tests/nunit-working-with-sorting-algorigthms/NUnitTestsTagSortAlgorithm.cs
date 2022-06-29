@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsTagSortAlgorithm
     {
         private ITagSort tagSort;
+
         [SetUp]
         public void Setup()
         {

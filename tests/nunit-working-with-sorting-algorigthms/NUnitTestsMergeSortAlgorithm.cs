@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsMergeSortAlgorithm
     {
         private IMergeSort mergeSort;
+
         [SetUp]
         public void Setup()
         {

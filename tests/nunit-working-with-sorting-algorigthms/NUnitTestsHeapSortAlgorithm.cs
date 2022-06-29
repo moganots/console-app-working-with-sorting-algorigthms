@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsHeapSortAlgorithm
     {
         private IHeapSort heapSort;
+
         [SetUp]
         public void Setup()
         {

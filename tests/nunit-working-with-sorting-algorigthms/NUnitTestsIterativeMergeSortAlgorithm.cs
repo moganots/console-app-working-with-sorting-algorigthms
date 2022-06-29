@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsIterativeMergeSortAlgorithm
     {
         private IIterativeMergeSort iterativeMergeSort;
+
         [SetUp]
         public void Setup()
         {

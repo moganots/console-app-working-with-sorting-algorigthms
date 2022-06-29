@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsBucketSortAlgorithm
     {
         private IBucketSort bucketSort;
+
         [SetUp]
         public void Setup()
         {

@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsRadixSortAlgorithm
     {
         private IRadixSort radixSort;
+
         [SetUp]
         public void Setup()
         {

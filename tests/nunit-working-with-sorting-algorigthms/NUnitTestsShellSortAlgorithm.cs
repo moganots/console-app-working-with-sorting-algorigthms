@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsShellSortAlgorithm
     {
         private IShellSort shellSort;
+
         [SetUp]
         public void Setup()
         {

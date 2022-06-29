@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsQuickSortOnDoublyLinkedListAlgorithm
     {
         private IQuickSortOnDoublyLinkedList quickSortOnDoublyLinkedList;
+
         [SetUp]
         public void Setup()
         {

@@ -9,6 +9,7 @@ namespace nunit_working_with_sorting_algorigthms
     public class NUnitTestsQuickSortAlgorithm
     {
         private IQuickSort quickSort;
+
         [SetUp]
         public void Setup()
         {
