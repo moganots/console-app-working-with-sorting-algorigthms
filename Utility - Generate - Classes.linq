@@ -16,20 +16,75 @@ void Main()
 	try{
 		string createdBy = "TS MOGANO";
 		string dateCreated = DateTime.Now.ToString("yyyy-MM-dd");
-		string directoryCurrent = System.IO.Directory.GetCurrentDirectory();
-		string directoryRoot = System.IO.Directory.GetParent(directoryCurrent).ToString();
+		string directoryCurrent = Directory.GetCurrentDirectory();
+		string directoryRoot = Directory.GetParent(directoryCurrent).ToString();
+		string directoryLib = Path.Combine(directoryCurrent, "lib");
+		string directoryTests = Path.Combine(directoryCurrent, "tests");
+		string directoryTestsMS = Path.Combine(directoryTests, "ms-test-working-with-sorting-algorigthms");
+		string directoryTestsNUnit = Path.Combine(directoryTests, "nunit-working-with-sorting-algorigthms");
+		string[] algorithms = {
+			"SelectionSort",
+			"BubbleSort",
+			"RecursiveBubbleSort",
+			"InsertionSort",
+			"RecursiveInsertionSort",
+			"MergeSort",
+			"IterativeMergeSort",
+			"QuickSort",
+			"IterativeQuickSort",
+			"HeapSort",
+			"CountingSort",
+			"RadixSort",
+			"BucketSort",
+			"ShellSort",
+			"TimSort",
+			"CombSort",
+			"PigeonholeSort",
+			"CycleSort",
+			"CocktailSort",
+			"StrandSort",
+			"BitonicSort",
+			"PancakeSort",
+			"BinaryInsertionSort",
+			"BogoSortOrPermutationSort",
+			"PermutationSort",
+			"GnomeSort",
+			"SleepSort",
+			"StructureSort",
+			"ByMultipleRulesSort",
+			"StoogeSort",
+			"TagSort",
+			"TreeSort",
+			"CartesianTreeSort",
+			"OddEvenSort",
+			"BrickSort",
+			"QuickSortOnSinglyLinkedList",
+			"QuickSortOnDoublyLinkedList",
+			"ThreeWayQuickSort",
+			"MergeSortforLinkedLists",
+			"MergeSortforDoublyLinkedList",
+			"ThreeWayMergeSort"};
 		
-		directoryCurrent.Dump();
 		directoryRoot.Dump();
+		directoryCurrent.Dump();
+		directoryLib.Dump();
+		directoryTests.Dump();
+		directoryTestsMS.Dump();
+		directoryTestsNUnit.Dump();
 		
+		CleanDirectoryOnly(directoryLib, ".cs");
+		CleanDirectoryOnly(directoryTestsMS, ".cs");
+		CleanDirectoryOnly(directoryTestsNUnit, ".cs");
 		
-		
-		string dirSource = @"C:\Users\A236978\source\repos\console-app-working-with-sorting-algorigthms";
-		string [] dirSourceFiles = System.IO.Directory.EnumerateFiles(dirSource, "*.cs", SearchOption.TopDirectoryOnly).ToArray();
-		string dirTarget = @"\\10.147.36.254\d$\Temp\Testing\JSEDownload";
-		string [] dirTargetFiles = System.IO.Directory.EnumerateFiles(dirTarget, "*.*", SearchOption.TopDirectoryOnly).ToArray();
-
-		dirTargetFiles.Select((file) => (new FileInfo(file)).Name).Dump();
+		foreach(string algorithm in algorithms){
+			string libClass = templateLibaryClass(algorithm, createdBy, dateCreated);
+			string msTestClass = templateMSTestClass(algorithm, createdBy, dateCreated);
+			string nunitClass = templateNUnitTestClass(algorithm, createdBy, dateCreated);
+			
+			replaceFile(Path.Combine(directoryLib, String.Format("{0}.cs", algorithm)), libClass);
+			replaceFile(Path.Combine(directoryTestsMS, String.Format("MSTests{0}Algorithm.cs", algorithm)), msTestClass);
+			replaceFile(Path.Combine(directoryTestsNUnit, String.Format("NUnitTests{0}Algorithm.cs", algorithm)), nunitClass);
+		}
 
 	}catch(Exception exception){
 		exception.Dump();
@@ -41,7 +96,15 @@ public string SplitCamelCase(string str)
 {
 	return Regex.Replace( Regex.Replace( str, @"(\P{Ll})(\P{Ll}\p{Ll})", "$1 $2" ), @"(\p{Ll})(\P{Ll})", "$1 $2" );
 }
-private void cleanAndDeleteDirectory(string path){
+private string CapitalizeFirstLetter(string str) {
+	str = (str ?? String.Empty);
+	return str.Substring(0, 1).ToUpper() + str.Substring(1);
+}
+private string LowerFirstLetter(string str) {
+	str = (str ?? String.Empty);
+	return str.Substring(0, 1).ToLower() + str.Substring(1);
+}
+private void CleanAndDeleteDirectory(string path){
 	if(System.IO.Directory.Exists(path)){
 		Console.WriteLine("Clean and Delete Directory : {0}", path);
 		System.IO.DirectoryInfo rootDir = new DirectoryInfo(path);
@@ -51,9 +114,24 @@ private void cleanAndDeleteDirectory(string path){
 		}
 		foreach (DirectoryInfo dir in rootDir.EnumerateDirectories())
 		{
-		    cleanAndDeleteDirectory(dir.ToString());
+		    CleanAndDeleteDirectory(dir.ToString());
 		}
 		rootDir.Delete(true);
+	}
+}
+private void CleanDirectoryOnly(string path, string fileExtension = "*.*"){
+	if(System.IO.Directory.Exists(path)){
+		Console.WriteLine("Cleaning Directory : {0}", path);
+		System.IO.DirectoryInfo rootDir = new DirectoryInfo(path);
+		IEnumerable<FileInfo> files = rootDir.EnumerateFiles().Where(file => fileExtension.Equals("*.*") || file.Name.EndsWith(fileExtension));
+		foreach (FileInfo file in files)
+		{
+		    file.Delete(); 
+		}
+		foreach (DirectoryInfo dir in rootDir.EnumerateDirectories())
+		{
+		    CleanAndDeleteDirectory(dir.ToString());
+		}
 	}
 }
 private void createDirectoryIfNotExists(string path){
@@ -78,253 +156,90 @@ private void replaceFile(string path, string content){
 	deleteFileIfExists(path);
 	System.IO.File.WriteAllText(path, content);
 }
-private String templateMsSqlModelIdasGenioDbApi(string createdBy, string dateCreated, string schemaName, string tableName, string entityParameters, string componentParameters, string componentReturnParameters) {
-	System.Text.StringBuilder sb = new StringBuilder();
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Author:		" + createdBy);
-	sb.AppendLine("| Create date:	" + dateCreated);
-	sb.AppendLine("| Description:	IDAS - Genio - API - MS SQL Entity (Model) utility class for the [" + schemaName + "].[" + tableName + "] Table");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
+private String templateLibaryClass(string name, string createdBy, string dateCreated){
+	StringBuilder sb = new StringBuilder();
+	name = SplitCamelCase(name);
+	string className = name.Replace(" ", String.Empty);
+	string variableName = LowerFirstLetter(className);
+	sb.AppendLine("using System;");
+	sb.AppendLine("using System.Collections.Generic;");
+	sb.AppendLine("using System.Linq;");
+	sb.AppendLine("using System.Text;");
+	sb.AppendLine("using System.Threading.Tasks;");
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Function(s)");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("const " + tableName + " = () => {");
-	sb.AppendLine("	const fromEntity = (entity = {}) => {");
-	sb.AppendLine("		return fromComponents(" + entityParameters + ");");
-	sb.AppendLine("	}");
-	sb.AppendLine("	const fromComponents = (" + componentParameters + ") => {");
-	sb.AppendLine("		return {");
-	sb.AppendLine(String.Format("\t\t\t{0}", componentReturnParameters));
-	sb.AppendLine("		}");
-	sb.AppendLine("	}");
-	sb.AppendLine("	return {");
-	sb.AppendLine("		fromEntity: fromEntity,");
-	sb.AppendLine("		fromComponents: fromComponents");
-	sb.AppendLine("	}");
+	sb.AppendLine("namespace lib");
+	sb.AppendLine("{");
+	sb.AppendLine("    /// <summary>");
+	sb.AppendLine(String.Format("    /// Defines the structure (properties, methods, etc.) and syntax for the {0} Algorithm", name));
+	sb.AppendLine("    /// </summary>");
+	sb.AppendLine(String.Format("    public interface I{0}", className));
+	sb.AppendLine("    {");
+	sb.AppendLine("    }");
+	sb.AppendLine("    /// <summary>");
+	sb.AppendLine(String.Format("    /// Implements the structure (properties, methods, etc.) and syntax for the {0} Algorithm", name));
+	sb.AppendLine("    /// </summary>");
+	sb.AppendLine(String.Format("    public class {0}: I{0}", className));
+	sb.AppendLine("    {");
+	sb.AppendLine("    }");
 	sb.AppendLine("}");
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| module.exports");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("module.exports = " + tableName + ";");
 	return sb.ToString();
 }
-private String templateMsSqlRepositoryIdasGenioDbApi(string createdBy, string dateCreated, string schemaName, string tableName){
-	System.Text.StringBuilder sb = new StringBuilder();
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Author:		" + createdBy);
-	sb.AppendLine("| Create date:	" + dateCreated);
-	sb.AppendLine("| Description:	IDAS - Genio - API - MS SQL Entity (Model) Repository utility class for the [" + schemaName + "].[" + tableName + "] Table");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
+private String templateMSTestClass(string name, string createdBy, string dateCreated){
+	StringBuilder sb = new StringBuilder();
+	name = SplitCamelCase(name);
+	string className = name.Replace(" ", String.Empty);
+	string variableName = LowerFirstLetter(className);
+	sb.AppendLine("using lib;");
+	sb.AppendLine("using Microsoft.VisualStudio.TestTools.UnitTesting;");
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Dependency(ies)");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("const entityName = `" + tableName + "`;");
-	sb.AppendLine("const _" + tableName + " = require(`./../../models/mssql/" + tableName + "`);");
-	sb.AppendLine("const _dbContext = require(`./../../db-context/mssql/mssql-idas-genio-db-context`);");
-	sb.AppendLine("const { onHttpRequestCompleted } = require(`../../../common/logging/logger`);");
-	sb.AppendLine("const { getRequestQueryParametersWithoutUid } = require(`../../../common/http-helper`);");
-	if(tableName.Equals("FileAttachment")){
-		sb.AppendLine("const { writeFileAttachmentToDisc } = require(`../../../common/functions`);");
-	}
+	sb.AppendLine("namespace ms_test_working_with_sorting_algorigthms");
+	sb.AppendLine("{");
+	sb.AppendLine("    /// <summary>");
+	sb.AppendLine(String.Format("    /// Defines, sets up and implements the MS (Microsoft) test(s) for the {0} Algorithm", name));
+	sb.AppendLine("    /// </summary>");
+	sb.AppendLine("    [TestClass]");
+	sb.AppendLine(String.Format("    public class MSTests{0}Algorithm", className));
+	sb.AppendLine("    {");
+	sb.AppendLine(String.Format("        private I{0} {1};", className, variableName));
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Function(s)");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("const Repository = () => {");
-	sb.AppendLine("    const " + tableName + " = _" + tableName + "();");
-	sb.AppendLine("    const dbContext = _dbContext();");
-	sb.AppendLine("    const create = (request, response, next) => {");
-	sb.AppendLine("        try{");
-	sb.AppendLine("            const uid = request.query.uid;");
-	//sb.AppendLine("            const entity = " + tableName + ".fromEntity(request.body);");
-	sb.AppendLine("            dbContext.create(uid, entityName, request.body, (error, data, message) => {");
-	if(tableName.Equals("FileAttachment")){
-		sb.AppendLine("                writeFileAttachmentToDisc(error, data[0]);");
-	}
-	sb.AppendLine("                return onHttpRequestCompleted(__filename, request, response, error, data, message);");
-	sb.AppendLine("            });");
-	sb.AppendLine("        }catch(error){");
-	sb.AppendLine("            return onHttpRequestCompleted(__filename, request, response, error);");
+	sb.AppendLine("        [TestMethod]");
+	sb.AppendLine("        public void TestMethod1()");
+	sb.AppendLine("        {");
 	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	sb.AppendLine("    const getAll = (request, response, next) => {");
-	sb.AppendLine("        try{");
-	sb.AppendLine("            const uid = request.query.uid;");
-	sb.AppendLine("            dbContext.getAll(uid, entityName, (error, data, message) => {");
-	sb.AppendLine("                return onHttpRequestCompleted(__filename, request, response, error, data, message);");
-	sb.AppendLine("            });");
-	sb.AppendLine("        }catch(error){");
-	sb.AppendLine("            return onHttpRequestCompleted(__filename, request, response, error);");
-	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	sb.AppendLine("    const getById = (request, response, next) => {");
-	sb.AppendLine("        try{");
-	sb.AppendLine("            const uid = request.query.uid;");
-	sb.AppendLine("            const entityId = request.query.id;");
-	sb.AppendLine("            dbContext.getById(uid, entityName, entityId, (error, data, message) => {");
-	sb.AppendLine("                return onHttpRequestCompleted(__filename, request, response, error, data, message);");
-	sb.AppendLine("            });");
-	sb.AppendLine("        }catch(error){");
-	sb.AppendLine("            return onHttpRequestCompleted(__filename, request, response, error);");
-	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	sb.AppendLine("    const getBy = (request, response, next) => {");
-	sb.AppendLine("        try{");
-	sb.AppendLine("            const uid = request.query.uid;");
-	sb.AppendLine("            dbContext.getBy(uid, entityName, getRequestQueryParametersWithoutUid(request), (error, data, message) => {");
-	sb.AppendLine("                return onHttpRequestCompleted(__filename, request, response, error, data, message);");
-	sb.AppendLine("            });");
-	sb.AppendLine("        }catch(error){");
-	sb.AppendLine("            return onHttpRequestCompleted(__filename, request, response, error);");
-	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	sb.AppendLine("    const update = (request, response, next) => {");
-	sb.AppendLine("        try{");
-	sb.AppendLine("            const uid = request.query.uid;");
-	// sb.AppendLine("            const entity = " + tableName + ".fromEntity(request.body);");
-	sb.AppendLine("            dbContext.update(uid, entityName, request.body, (error, data, message) => {");
-	sb.AppendLine("                return onHttpRequestCompleted(__filename, request, response, error, data, message);");
-	sb.AppendLine("            });");
-	sb.AppendLine("        }catch(error){");
-	sb.AppendLine("            return onHttpRequestCompleted(__filename, request, response, error);");
-	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	sb.AppendLine("    const _delete = (request, response, next) => {");
-	sb.AppendLine("        try{");
-	sb.AppendLine("            const uid = request.query.uid;");
-	// sb.AppendLine("            const entity = " + tableName + ".fromEntity(request.body);");
-	sb.AppendLine("            dbContext.delete(uid, entityName, request.body._id, (error, data, message) => {");
-	sb.AppendLine("                return onHttpRequestCompleted(__filename, request, response, error, data, message);");
-	sb.AppendLine("            });");
-	sb.AppendLine("        }catch(error){");
-	sb.AppendLine("            return onHttpRequestCompleted(__filename, request, response, error);");
-	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	if(tableName.Equals("User")){
-		sb.AppendLine("  const callGetUserProfile = (");
-		sb.AppendLine("    uid,");
-		sb.AppendLine("    emailAddress,");
-		sb.AppendLine("    id = null,");
-		sb.AppendLine("    employeeId = null,");
-		sb.AppendLine("    clientId = null,");
-		sb.AppendLine("    supplierId = null,");
-		sb.AppendLine("    callback");
-		sb.AppendLine("  ) => {");
-		sb.AppendLine("    try {");
-		sb.AppendLine("      dbContext.executeScalarFunction(");
-		sb.AppendLine("        `dbo`,");
-		sb.AppendLine("        \"GetUserProfile\",");
-		sb.AppendLine("        [");
-		sb.AppendLine("          { EmailAddress: emailAddress },");
-		sb.AppendLine("          { _id: id },");
-		sb.AppendLine("          { EmployeeId: employeeId },");
-		sb.AppendLine("          { ClientId: clientId },");
-		sb.AppendLine("          { SupplierId: supplierId },");
-		sb.AppendLine("        ],");
-		sb.AppendLine("        false,");
-		sb.AppendLine("        callback");
-		sb.AppendLine("      );");
-		sb.AppendLine("    } catch (error) {");
-		sb.AppendLine("      callback(error);");
-		sb.AppendLine("    } finally {");
-		sb.AppendLine("    }");
-		sb.AppendLine("  };");
-		sb.AppendLine("  const callOnSuccessfulLoginOrLogout = (entity, callback) => {");
-		sb.AppendLine("    try {");
-		sb.AppendLine("      dbContext.executeStoredProcedure(");
-		sb.AppendLine("        `dbo`,");
-		sb.AppendLine("        \"spAuthentication_OnSuccessfulLoginOrLogout\",");
-		sb.AppendLine("        {");
-		sb.AppendLine("          _id: entity._id,");
-		sb.AppendLine("          DateLastLoggedIn: entity.DateLastLoggedIn,");
-		sb.AppendLine("          SessionToken: entity.SessionToken,");
-		sb.AppendLine("          ModifiedBy: entity.ModifiedBy || entity._id");
-		sb.AppendLine("        },");
-		sb.AppendLine("        false,");
-		sb.AppendLine("        callback");
-		sb.AppendLine("      );");
-		sb.AppendLine("    } catch (error) {");
-		sb.AppendLine("      callback(error);");
-		sb.AppendLine("    } finally {");
-		sb.AppendLine("    }");
-		sb.AppendLine("  };");
-	}
-	sb.AppendLine("    return {");
-	sb.AppendLine("        create: create,");
-	sb.AppendLine("        getAll: getAll,");
-	sb.AppendLine("        getById: getById,");
-	sb.AppendLine("        getBy: getBy,");
-	sb.AppendLine("        update: update,");
-	sb.AppendLine("        delete: _delete,");
-	if(tableName.Equals("User")){
-		sb.AppendLine("        callGetUserProfile: callGetUserProfile,");
-		sb.AppendLine("        onSuccessfulLogin: callOnSuccessfulLoginOrLogout,");
-		sb.AppendLine("        onSuccessfulLogout: callOnSuccessfulLoginOrLogout,");
-	}
 	sb.AppendLine("    }");
 	sb.AppendLine("}");
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| module.exports");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("module.exports = Repository;");
 	return sb.ToString();
 }
-private String templateMsSqlModelIdasGenioDbApiDefaultUserProfile(string createdBy, string dateCreated) {
-	System.Text.StringBuilder sb = new StringBuilder();
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Author:		" + createdBy);
-	sb.AppendLine("| Create date:	" + dateCreated);
-	sb.AppendLine("| Description:	IDAS - Genio - API - Entity (Model) for the UserProfile");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
+private String templateNUnitTestClass(string name, string createdBy, string dateCreated){
+	StringBuilder sb = new StringBuilder();
+	name = SplitCamelCase(name);
+	string className = name.Replace(" ", String.Empty);
+	string variableName = LowerFirstLetter(className);
+	sb.AppendLine("using lib;");
+	sb.AppendLine("using NUnit.Framework;");
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| Function(s)");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("const UserProfile = () => {");
-	sb.AppendLine("    const fromComponents = (user = {}, employee = {}, client = {}, supplier = {}, contactDetail = {}) => {");
-	sb.AppendLine("        user.EmployeeId = employee._id;");
-	sb.AppendLine("        user.ClientId = client._id;");
-	sb.AppendLine("        user.SupplierId = supplier._id;");
-	sb.AppendLine("        return {");
-	sb.AppendLine("            User : user,");
-	sb.AppendLine("            Employee : employee,");
-	sb.AppendLine("            Client : client,");
-	sb.AppendLine("            Supplier : supplier,");
-	sb.AppendLine("            ContactDetail : contactDetail,");
+	sb.AppendLine("namespace nunit_working_with_sorting_algorigthms");
+	sb.AppendLine("{");
+	sb.AppendLine("    /// <summary>");
+	sb.AppendLine(String.Format("    /// Defines, sets up and implements the NUnit test(s) for the {0} Algorithm", name));
+	sb.AppendLine("    /// </summary>");
+	sb.AppendLine(String.Format("    public class NUnitTests{0}Algorithm", className));
+	sb.AppendLine("    {");
+	sb.AppendLine(String.Format("        private I{0} {1};", className, variableName));
+	sb.AppendLine("        [SetUp]");
+	sb.AppendLine("        public void Setup()");
+	sb.AppendLine("        {");
 	sb.AppendLine("        }");
-	sb.AppendLine("    }");
-	sb.AppendLine("    return {");
-	sb.AppendLine("        fromComponents: fromComponents");
+	sb.AppendLine("");
+	sb.AppendLine("        [Test]");
+	sb.AppendLine("        public void Test1()");
+	sb.AppendLine("        {");
+	sb.AppendLine("            Assert.Pass();");
+	sb.AppendLine("        }");
 	sb.AppendLine("    }");
 	sb.AppendLine("}");
 	sb.AppendLine("");
-	sb.AppendLine("/*");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine("| module.exports");
-	sb.AppendLine("|--------------------------------------------------------------------------------------------------------------------------------------------");
-	sb.AppendLine(" */");
-	sb.AppendLine("module.exports = UserProfile;");
 	return sb.ToString();
 }
