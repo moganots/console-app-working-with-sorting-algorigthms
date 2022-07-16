@@ -4,8 +4,11 @@
 /dist
 /tmp
 /out-tsc
-/bin
-/obj
+
+# Ignore any files in /bin and /obj Folders
+**/bin/*
+**/obj/*
+
 # Only exists if Bazel was run
 /bazel-out
 
